@@ -27,7 +27,7 @@ y = weblogs.iloc[:, -1].values # Labels (Target)
 X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.25, random_state=1)
 
 pipeline = Pipeline([
-    ('imputer', SimpleImputer(strategy='median')),
+    ('imputer', SimpleImputer(strategy='mean')),
     ('scaler', StandardScaler()),
     ('classifier', DecisionTreeClassifier(random_state=1))
 ])
