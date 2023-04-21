@@ -21,10 +21,10 @@ weblogs.drop_duplicates()#Alle dubbele waarden verwijderen uit de dataframe
 
 #splits de dataframe in twee groepen
 X = weblogs.iloc[:, :-1].values # Features
-Y = weblogs.iloc[:, -1].values # Labels (Target)
+y = weblogs.iloc[:, -1].values # Labels (Target)
 
 #Splits de dataset in een training voor de features en de labels
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.25, random_state=1)
+X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.25, random_state=1)
 
 pipeline = Pipeline([
     ('imputer', SimpleImputer(strategy='median')),
@@ -39,17 +39,7 @@ parameters = {
 
 grid_search = GridSearchCV(pipeline, parameters, cv=5, n_jobs=-1, verbose=1)
 grid_search.fit(X_train, Y_train)
-'''
-#Vraagt de input aan de gebruiker als een string
-while True:
-    try:
-        input_str = input("Geef een rij van data in: ")
-        waarden = input_str.split('\t')[1:]
-        data = [int(waarden[0])] + [float(val) for val in waarden[1:]]
-        break
-    except ValueError:
-        print("Fout: Ongeldige invoer. Probeer opnieuw.") 
-'''
+
 if os.path.exists('model.joblib'):# Controleert dat het model al bestaat, als het al bestaat gaat het verder in de if anders word het model aangemaakt.
     csv_mtime = os.path.getmtime('weblogs.csv')# controleert wanneer het csv bestand is aangepast.
     model_mtime = os.path.getmtime('model.joblib')# controleert wanneer het model is aangepast.
@@ -67,6 +57,7 @@ weblogs_test = pd.read_csv('weblogs_test.csv') # Het inlezen van de CSV file als
 #Het verwijderen van onnodige data
 robot = 0
 mens = 0
+#Overloopt alle rijen van de test data en voorspelt of het een robot of een mens is
 for i, row in weblogs_test.iterrows():
     data = row.values[1:-1]
     probability = model.predict_proba([data]) * 100 #Berekent de percentages
