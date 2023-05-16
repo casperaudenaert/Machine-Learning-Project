@@ -49,7 +49,11 @@ model = joblib.load('model.joblib')# laad het model in.
 weblogs_test = pd.read_csv('weblogs_test.csv') # Het inlezen van de CSV file als een pandaframe
 robot = 0
 mens = 0
+if 'ROBOT' in weblogs_test:
+    weblogs_test = weblogs_test.drop('ROBOT', axis=1)
+if 'ID' in weblogs_test:
+    weblogs_test = weblogs_test.drop('ID', axis=1)
 for i, row in weblogs_test.iterrows():#Overloopt elke rij, met de index ervoor
-    data = row.values[1:-1]#Neemt de values van elke rij, behalve de eerste waarde 'ID' en de laatse waarde 'ROBOT'
+    data = row.values#Neemt de values van elke rij, behalve de eerste waarde 'ID' en de laatse waarde 'ROBOT'
     probability = model.predict_proba([data]) * 100 #Berekent de percentages
     print('Zekerheid Mens:',format(probability[0][0], ".2f"), '%','Zekerheid Robot:',format(probability[0][1], ".2f"), '%')#Print de percentages af
