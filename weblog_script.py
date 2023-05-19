@@ -56,4 +56,8 @@ if 'ID' in weblogs_test:
 for i, row in weblogs_test.iterrows():#Overloopt elke rij, met de index ervoor
     data = row.values#Neemt de values van elke rij, behalve de eerste waarde 'ID' en de laatse waarde 'ROBOT'
     probability = model.predict_proba([data]) * 100 #Berekent de percentages
+    if probability[0][0] > probability[0][1]:
+        print(f'Klasse: Mens op rij {i}')
+    else:
+        print(f'Klasse: Mens op rij {i}')
     print('Zekerheid Mens:',format(probability[0][0], ".2f"), '%','Zekerheid Robot:',format(probability[0][1], ".2f"), '%')#Print de percentages af
